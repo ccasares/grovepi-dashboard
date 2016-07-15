@@ -1,7 +1,7 @@
 # grovepi-dashboard
 
 * Install nodejs in the Pi
-* Clone this repo in Pi. Copy `assets` folder to your local computer.
+* Clone this repo in Pi. Copy `assets` folder contents to your local computer.
 * Run in your Pi:
 ```bash
 npm install
