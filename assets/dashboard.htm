@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>Grove Pi Realtime Dashboard</title>
+      <!-- Loading Bootstrap -->
+      <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+      <!-- Loading Drunken Parrot UI -->
+      <link href="css/drunken-parrot.css" rel="stylesheet">
+
+      <link href="css/demo.css" rel="stylesheet">
+
+      <script language="javascript" type="text/javascript">
+         var version = "v1.0.0";
+         const LOG         = 'LOG';
+         const PROXIMITY   = 'PROXIMITY';
+         const TEMPERATURE = 'TEMPERATURE';
+         const HUMIDITY    = 'HUMIDITY';
+         const LIGHT       = 'LIGHT';
+         const DIMMER      = 'DIMMER';
+         const BUTTON      = 'BUTTON';
+         const SOUND       = 'SOUND';
+         const RELAY       = 'RELAY';
+         const SEP         = '|';
+      </script>
+
+   </head>
+   <body>
+      <div class="container">
+         <div class="row">
+            <div class="col-md-20">
+               <div id="panels">
+                  <p>
+                   <!-- BEGIN row  TITLE, CLOCK -->
+                   <div class="col-md-15 center-cell">
+                      <h2 class="demo-section-title">Grove Pi Realtime Dashboard</h2>
+                   </div>
+                   <!-- END row  TITLE, CLOCK -->
+                  <!-- BEGIN row  LOGOs -->
+                  <div class="row">
+                     <div class="col-md-4">
+                        <div>
+                           <div class="panel left-cell">
+                              <a href="javascript:resetCounters();">
+                              <img src="images/logo-oracle.png" alt="" width="260">
+                              </a>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-4">
+                        <div class="panel-body-small">
+                           <h6 id=VERSION>&nbsp;</h6>
+                           <div id=ConnectedDeviceInfo style="display:none">
+                              <h6 class="text-underline">Información de dispositivo conectado</h6>
+                              <h6>
+                                 <span class="text-underline">Modelo:&nbsp;</span>
+                                 <span id=MODEL></span>
+                              </h6>
+                              <h6>
+                                 <span class="text-underline">Nº de Serie:&nbsp;</span>
+                                 <span id=SERIALNUMBER></span>
+                              </h6>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="panel-body-small right-cell">
+                        <div id=DISCONNECTED style="display:block">
+                           <img src="images/disconnected.png" width="51">
+                        </div>
+                        <div id=CONNECTED style="display:none">
+                           <img src="images/connected.png" width="51">
+                        </div>
+                     </div>
+                  </div>
+                  <!-- END row  LOGOs -->
+                  <!-- BEGIN row  DATA -->
+                  <div class="col-md-12">
+                    <div class="row">
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Temperature</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                                <h2 id=TEMPERATURE >00.0º</h2>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <h3 class="panel-title center-cell">Humidity</h3>
+                             </div>
+                             <div class="panel-body center-cell">
+                                <h2 id=HUMIDITY>00%</h2>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Proximity</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                                <h2 id=PROXIMITY >000</h2>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-2">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Light</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                                <h2 id=LIGHT >000.00</h2>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Sound</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                                <h2 id=SOUND >000</h2>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Dimmer</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                                <h2 id=DIMMER>0000</h2>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+                  <!---------------------------------------------------------------------------------------->
+                  <div class="col-md-12">
+                    <div class="row">
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Button</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                               <div class="panel-body-small center-cell">
+                                  <div id=UNPRESSED style="display:block">
+                                     <img src="images/unpressed.png" width="51">
+                                  </div>
+                                  <div id=PRESSED style="display:none">
+                                     <img src="images/pressed.png" width="51">
+                                  </div>
+                               </div>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Red Led</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                               <input name="red" type="checkbox" data-toggle="switch" onchange="handleChange(this);"/>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <h3 class="panel-title center-cell">Green Led</h3>
+                             </div>
+                             <div class="panel-body center-cell">
+                               <input name="green" type="checkbox" data-toggle="switch" onchange="handleChange(this);"/>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Blue Led</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell">
+                               <input name="blue" type="checkbox" data-toggle="switch" onchange="handleChange(this);"/>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Buzzer</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell" height="200px">
+                               <input name="buzzer" type="checkbox" data-toggle="switch" onchange="handleChange(this);"/>
+                             </div>
+                          </div>
+                       </div>
+                       <div class="col-md-1">
+                          <div class="panel panel-info">
+                             <div class="panel-heading">
+                                <a class="panel-title no-link" href="javascript:showUpdatePulseThresholds();">
+                                   <h3 class="panel-title center-cell">Relay</h3>
+                                </a>
+                             </div>
+                             <div class="panel-body center-cell" height="200px">
+                               <input name="relay" type="checkbox" data-toggle="switch" onchange="handleChange(this);"/>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+                  <!-- END row  DATA -->
+                  </p>
+               </div>
+               <div id="debugAccordion" style="display:block">
+                  <h3>Debug</h3>
+                  <div id=DEBUGPANEL class="row" style="height: 800px;">
+                     <div class="col-md-12">
+                        <div id="panels">
+                           <div id=DEBUG >
+                              <p>
+                              <form id=ResetOutput name="ResetOutput">
+                                 <span class="courier-font"> OUTPUT WINDOW:</span>
+                                 <input type="submit" id="clearButton" formaction="javascript:clear();" value="Clear">
+                              </form>
+                              <p>
+                              <div id="output" class="debug-container courier-font"></div>
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
+   <script language="javascript" type="text/javascript">
+      var debug = false;
+      var websocket = undefined;
+      var reconnect = true;
+      var connected = false;
+      var wsserver = "";
+      var wsUri;
+      var output;
+      // Status
+      var deviceStatus =  {
+        red: false,
+        green: false,
+        blue: false,
+        buzzer: false,
+        relay: false
+      };
+
+      function handleChange(cb) {
+        if ( deviceStatus[cb.name] !== cb.checked) {
+          deviceStatus[cb.name] = cb.checked;
+          if ( websocket !== undefined) {
+            var obj = {};
+            obj[cb.name] = deviceStatus[cb.name];
+            websocket.send(JSON.stringify(obj));
+          }
+        }
+      }
+
+      window.addEventListener("load", init, false);
+
+      function getParameterByName(name) {
+      	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+      	var results = regex.exec(location.search);
+      	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, '\xA0'));
+      }
+
+      function setText(element, message) {
+        var e = document.getElementById(element);
+        e.removeChild(e.childNodes[0]);
+        e.appendChild(document.createTextNode(message));
+      }
+
+      function init() {
+      	updateClock();
+      	$('#VERSION').text(version);
+      	output = document.getElementById("output");
+      	debug = true;
+      	wsserver = getParameterByName('wsserver');
+        connect();
+      }
+
+      function connect() {
+      	var msg;
+      	wsUri = "ws://" + wsserver + "/ws";
+        writeToScreen("Connecting to " + wsUri, "blue");
+      	websocket = new WebSocket(wsUri);
+      	websocket.onopen = function(evt) {
+      		onOpen(evt)
+      	};
+      	websocket.onclose = function(evt) {
+      		onClose(evt)
+      	};
+      	websocket.onmessage = function(evt) {
+      		onMessage(evt)
+      	};
+      	websocket.onerror = function(evt) {
+      		onError(evt)
+      	};
+      }
+
+      function disconnect() {
+      	if ( websocket != null) {
+      		console.log("disconnect()");
+      		writeToScreen("Disconnecting from " + wsUri);
+      		reconnect = false;
+      		websocket.close();
+      		websocket = null;
+      	}
+      }
+
+      function onOpen(evt) {
+      	writeToScreen("Successfully connected to " + wsUri, "green");
+      	$('#DISCONNECTED').css('display', 'none');
+      	$('#CONNECTED').css('display', 'block');
+        connected = true;
+      }
+
+      function onClose(evt) {
+      	console.log("onClose()");
+      	console.log('Reason: ' + evt.reason);
+      	writeToScreen("Disconnected from " + wsUri, "red");
+        connected = false;
+      	if ( evt.reason != '') {
+      		writeToScreen('Reason: ' + evt.reason+'</span>');
+      	}
+      	$('#DISCONNECTED').css('display', 'block');
+      	$('#CONNECTED').css('display', 'none');
+      }
+
+      function onMessage(evt) {
+        var message = evt.data;
+        var target = message.split("|")[0];
+        var payload = message.split("|")[1];
+
+        if ( target == LOG) {
+          writeToScreen(payload, "blue");
+        }
+        else if ( target == TEMPERATURE) {
+          var fixed = parseFloat(payload).toPrecision(2);
+          if ( fixed > 100)
+            $('#TEMPERATURE').text('n/a');
+          else
+            $('#TEMPERATURE').text(fixed + 'º');
+        }
+        else if ( target == HUMIDITY) {
+          var fixed = parseFloat(payload).toPrecision(2);
+          if ( fixed < 0)
+            $('#HUMIDITY').text('n/a');
+          else
+            $('#HUMIDITY').text(fixed + '%');
+        }
+        else if ( target == PROXIMITY) {
+          $('#PROXIMITY').text(payload);
+        }
+        else if ( target == LIGHT) {
+          $('#LIGHT').text(payload);
+        }
+        else if ( target == SOUND) {
+          $('#SOUND').text(payload);
+        }
+        else if ( target == DIMMER) {
+          $('#DIMMER').text(payload);
+        }
+        else if ( target == BUTTON) {
+          if ( payload == '1') {
+            $('#UNPRESSED').css('display', 'none');
+          	$('#PRESSED').css('display', 'block');
+          } else {
+            $('#UNPRESSED').css('display', 'block');
+          	$('#PRESSED').css('display', 'none');
+          }
+        }
+      }
+
+      function onError(evt) {
+      	console.log("onError()");
+      	console.log("ERROR: " + evt.data);
+      	reconnect = false;
+      	writeToScreen("ERROR: " + evt.data, "red");
+      }
+
+      function doSend(message) {
+      	if ( !( ( message.indexOf("PING") > -1) && hidePing))
+      	writeToScreen("SENT: " + message);
+      	websocket.send(message);
+      }
+
+      function registerRequest() {
+      	$.ajax({
+      		type: "POST",
+          url: "http://" + serverURI + "/WearableDemoMulti/Proxy/register",
+      		data: JSON.stringify({ deviceId : selectedDevice.imei }),
+      		contentType: "application/json",
+      		complete: function (data) {
+      		}
+      	});
+      }
+
+      function writeToScreen(message, color) {
+        var m = message;
+      	if ( color != null) {
+      		m = '<span style="color: ' + color + ';">' + message + '</span>';
+      	}
+      	var pre = document.createElement("p");
+      	pre.style.display = "inline";
+      	msg = getNow() + '\xA0' + m;
+      	pre.innerHTML = msg;
+      	output.appendChild(pre);
+      	output.appendChild(document.createElement("br"));
+      	scrollToEnd();
+      }
+
+      function scrollToEnd() {
+      	var elem = document.getElementById('output');
+      	elem.scrollTop = elem.scrollHeight;
+      }
+
+      function send() {
+      	message = document.forms["MessageForm"]["message"].value;
+      	doSend(message);
+      }
+
+      function getNow() {
+      	var date = new Date();
+      	var hours = "0" + date.getHours();
+      	var minutes = "0" + date.getMinutes();
+      	var seconds = "0" + date.getSeconds();
+      	var milliseconds = "00" + date.getMilliseconds();
+      	var formattedTime = '[' + hours.substr(hours.length-2) + ':' + minutes.substr(minutes.length-2) + ':' + seconds.substr(seconds.length-2) + ':' + milliseconds.substr(milliseconds.length-3)  + ']';
+      	return formattedTime;
+      }
+
+      function clear() {
+      	$("#output").html("");
+      }
+
+      function setHidePing(cb) {
+      	hidePing = cb.checked;
+      }
+
+    	function updateClock() {
+    		var now = new Date();
+
+    		// Get the hours, minutes and seconds from the current time
+    		var hours = now.getHours();
+    		var minutes = now.getMinutes();
+    		var seconds = now.getSeconds();
+
+    		// Format hours, minutes and seconds
+    		if (hours < 10) {
+    			hours = "0" + hours;
+    		}
+    		if (minutes < 10) {
+    			minutes = "0" + minutes;
+    		}
+    		if (seconds < 10) {
+    			seconds = "0" + seconds;
+    		}
+    		$("#watch").text(hours + ':' + minutes + ':' + seconds);
+    	}
+
+   </script>
+   <!-- Bootstrap core JavaScript
+      ================================================== -->
+   <!-- Placed at the end of the document so the pages load faster -->
+   <script src="js/jquery-1.11.0.min.js"></script>
+   <script src="js/bootstrap-switch.js"></script>
+   <script src="js/application.js"></script>
+<!--   <script src="uikit/js/uikit.min.js"></script>-->
+
+   <script language="javascript" type="text/javascript">
+     function getEventTarget(e) {
+         e = e || window.event;
+         return e.target || e.srcElement;
+     }
+   </script>
+
+   </body>
+</html>
