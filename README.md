@@ -2,6 +2,10 @@
 
 * Install nodejs in the Pi
 * Clone this repo in Pi. Copy `assets` folder to your local computer.
+* Run in your Pi:
+```bash
+npm install
+```
 * Run server
 ```bash
 $ node grovepi_ws.js
