@@ -4,7 +4,7 @@
 * Clone this repo in Pi. Copy `assets` folder contents to your local computer.
 * Run in your Pi:
 ```bash
-npm install
+$ npm install
 ```
 * Run server
 ```bash
